@@ -1,2 +1,0 @@
-jupyterlab>=1.0
-pandas
