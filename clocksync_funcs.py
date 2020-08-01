@@ -32,9 +32,9 @@ def sim_plot(df, node_count):
     for n0, n1 in combinations(range(node_count),2):
         plt.scatter(df.index, df[str(n0)]-df[str(n1)]);
 
-    plt.xlabel('Macroticks')
-    plt.ylabel('Skew')
-    plt.title('Skews between Clocks (Microticks)')
+    plt.xlabel('Time Slots')
+    plt.ylabel('Skew (milliseconds)')
+    plt.title('Skews between Clocks')
 
 
 # Simulation function
@@ -67,10 +67,10 @@ def clock_sync_sim(freq_tolerance=.5, adjustment_func=daisy_adj, clock_freq = 40
         df.loc[i,str(comparison_node)] = df.loc[i,str(comparison_node)] + adjustment_func(df, i, reporting_node, comparison_node, r)
 
 
-    # tsmax=(1/(clock_freq*(1+freq_tolerance/100)) *(10**3))
-    # tsmin=(1/(clock_freq*(1-freq_tolerance/100)) *(10**3))
-    #
-    # print("Bounds for Timeslot length in miliseconds are ({}, {})".format(tsmin,tsmax))
+    fmax=clock_freq*(1+freq_tolerance/100) # Max freq per error
+    fmin=clock_freq*(1-freq_tolerance/100) # Min freq per error
+
+    print("Bounds for microticks per timeslot: ({}, {}) microticks".format(fmin,fmax))
 
     sim_plot(df, node_count)
     return df
