@@ -1,2 +1,2 @@
-numpy==1.8.2
-matplotlib==1.4.2
+jupyterlab>=1.0
+pandas
