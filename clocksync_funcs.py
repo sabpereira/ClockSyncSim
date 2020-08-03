@@ -4,6 +4,7 @@
 
 import pandas as pd
 import numpy as np
+import math
 import matplotlib.pyplot as plt
 from itertools import combinations
 
@@ -29,11 +30,12 @@ def local_increment(clock_freq,timeslot_period,freq_tolerance=.5):
 
 # Error plot function
 def sim_plot(df, node_count):
+    fig=plt.figure(num=None, figsize=(8, 6), dpi=80, facecolor='w', edgecolor='k')
     for n0, n1 in combinations(range(node_count),2):
         plt.scatter(df.index, df[str(n0)]-df[str(n1)]);
 
     plt.xlabel('Time Slots')
-    plt.ylabel('Skew (milliseconds)')
+    plt.ylabel('Skew (ticks)')
     plt.title('Skews between Clocks')
 
 
@@ -70,7 +72,10 @@ def clock_sync_sim(freq_tolerance=.5, adjustment_func=daisy_adj, clock_freq = 40
     fmax=clock_freq*(1+freq_tolerance/100) # Max freq per error
     fmin=clock_freq*(1-freq_tolerance/100) # Min freq per error
 
-    print("Bounds for microticks per timeslot: ({}, {}) microticks".format(fmin,fmax))
+    max_dev = math.ceil(abs(2*timeslot_period*node_count*(fmin-fmax)))
+
+    # print("Bounds for microticks per timeslot: ({}, {}) microticks".format(fmin,fmax))
+    print("Maximum Deviation: +/- {} ticks".format(max_dev))
 
     sim_plot(df, node_count)
     return df
